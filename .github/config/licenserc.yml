@@ -1,0 +1,16 @@
+header:
+  license:
+    spdx-id: Apache-2.0  # TODO
+    copyright-owner: Group Name  # TODO
+    software-name: project name  # TODO
+
+  paths:  # TODO
+    - 'project/**/*.py'
+    - 'tests/**/*.py'
+
+  paths-ignore: # TODO
+    - 'dist'
+    - '**/*.md'
+    - 'LICENSE'
+
+  comment: on-failure

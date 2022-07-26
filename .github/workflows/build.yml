@@ -1,0 +1,52 @@
+name: Build & Test
+
+on:
+  push:
+    branches: [ master ]  # TODO: should only contains main/master
+  pull_request:
+
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+
+
+
+      # TODO: 1. Python
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          pip install pytest pytest-cov
+          pip install -r requirements-dev.txt
+
+      - name: Run tests and collect coverage
+        run: pytest --cov <project-name>  # TODO
+
+
+      # TODO: 2. Java
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'corretto'
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+
+
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3

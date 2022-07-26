@@ -1,0 +1,11 @@
+backend:
+  - 'foo/**/*'
+  - 'bar/**/*'
+
+document:
+  - any: ['docs/**/*']
+  - any: ['**/*.md']
+  - 'README.md'
+
+ci:
+  - any: ['.github/**/*']

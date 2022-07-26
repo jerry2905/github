@@ -1,0 +1,55 @@
+name: Check Python Code Style
+
+on:
+  push:
+    branches: [ master ]  # TODO: should only contains main/master
+    paths:
+      - '**.py'
+  pull_request_target:
+    paths:
+      - '**.py'
+
+
+jobs:
+  autoyapf:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout commit
+        if: github.event_name == 'push'
+        uses: actions/checkout@v3
+
+      - name: Checkout pull request
+        if: github.event_name == 'pull_request_target'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.pull_request.head.ref }}
+
+
+      - name: autoyapf
+        uses: mritunjaysharma394/autoyapf@v2
+        with:
+          args: --style pep8 --recursive --in-place .
+
+
+      - name: Create pull request
+        if: github.event_name == 'push'
+        uses: peter-evans/create-pull-request@v3
+        with:
+          author: GitHub Actions <41898282+github-actions[bot]@users.noreply.github.com>
+          commit-message: "style: format python code (pep8)"
+          title: "style: format python code (pep8)"
+          body: Reformat to pep8 style.
+          branch: code-style
+
+      - name: Commit formatted files
+        if: github.event_name == 'pull_request_target'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: EndBug/add-and-commit@v8.0.2
+        with:
+          default_author: github_actions
+          message: "style: format python code (pep8)"
